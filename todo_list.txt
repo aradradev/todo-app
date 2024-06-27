@@ -1,0 +1,2 @@
+Learn python
+commit daily
