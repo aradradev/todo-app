@@ -1,1 +1,6 @@
+# Virtual Environment
 venv/
+
+# Ignore system files
+*.pyc
+__pycache__/

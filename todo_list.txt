@@ -1,2 +1,1 @@
-Learn python
 solving dsa
