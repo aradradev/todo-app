@@ -160,5 +160,4 @@ def main():
             print("Invalid choice. Please try again.\n")
 
 if __name__ == "__main__":
-    print("Starting To-Do List Application")
     main()
