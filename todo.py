@@ -1,5 +1,3 @@
-import sys
-
 def display_menu():
     print("To-Do List Application")
     print("======================")
