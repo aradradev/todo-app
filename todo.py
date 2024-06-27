@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 def display_menu():
     print("======================")
     print("To-Do List Application")
@@ -10,7 +12,9 @@ def display_menu():
     print("6. Remove To-Do Item")
     print("7. View To-Do List by Category")
     print("8. Search To-Do Items by keyword")
-    print("9. Exit")
+    print("9. Sort To-Do List")
+    print("10. Set Reminders for Tasks")
+    print("11. Exit")
 
 def view_todo_list():
     print("\nTo-Do List:")
@@ -21,8 +25,8 @@ def view_todo_list():
         else:
             for i, item in enumerate(items, 1):
                 try:
-                    task, category, deadline = item.strip().split('|')
-                    print(f"{i}. [{category} ] {task} - Due by {deadline}")
+                    task, category, deadline, priority = item.strip().split('|')
+                    print(f"{i}. [{category} ] {task} - Priority: {priority} - Due by {deadline}")
                 except ValueError:
                     print(f"Error in item: {item}")
     print()
@@ -32,8 +36,9 @@ def add_todo_item():
     item = input("Enter a new to-do item: ").strip().lower()
     category = input("Enter a category for this item: ").strip().lower()
     deadline = input("Enter a deadline for this item (YYYY-MM-DD): ")
+    priority = input("Enter the priority for this item (High, Medium, Low): ").strip().lower()
     with open('todo_list.txt', 'a') as file:
-        file.write(f"{item} | {category} | {deadline}\n")
+        file.write(f"{item} | {category} | {deadline} | {priority}\n")
     print("To-Do item added successfully.")
 
 def edit_todo_item():
@@ -45,7 +50,8 @@ def edit_todo_item():
         new_item = input("Enter the new item: ")
         new_category = input("Enter the new category: ")
         new_deadline = input("Enter the new deadline: ")
-        items[item_number - 1] = f"{new_item} | {new_category} | {new_deadline}\n"
+        new_priority = input("Enter the new priority (High, Medium, Low): ")
+        items[item_number - 1] = f"{new_item} | {new_category} | {new_priority} | {new_deadline}\n"
         with open('todo_list.txt', 'w') as file:
             file.writelines(items)
         print("Item edited successfully.")
@@ -76,8 +82,8 @@ def view_completed_items():
         else:
             for i, item in enumerate(completed_items, 1):
                 try:
-                    task, category, deadline = item.strip().split('|')
-                    print(f"{i}. [{category}], {task} - Due by {deadline}")
+                    task, category, deadline, priority = item.strip().split('|')
+                    print(f"{i}. [{category}], {task} - Priority: {priority} - Due by {deadline}")
                 except ValueError:
                     print(f"Error in item: {item}")
                     
@@ -104,7 +110,7 @@ def view_by_category():
         category_items = []
         for item in items:
             try:
-                task, cat, deadline = item.strip().split('|')
+                task, cat, deadline, priority = item.strip().split('|')
                 if cat.strip() == category.strip():
                     category_items.append(item.strip())
             except ValueError:
@@ -114,7 +120,7 @@ def view_by_category():
         else:
             for i, item in enumerate(category_items, 1):
                 task, cat, deadline = item.strip().split('|')
-                print(f"{i}. {task} - Due by {deadline}")
+                print(f"{i}. {task} - Priority: {priority} - Due by {deadline}")
     print()
 
 def search_todo_items():
@@ -130,8 +136,68 @@ def search_todo_items():
             print(f"No items found containing '{keyword}'.")
         else:
             for i, item in enumerate(matching_items, 1):
-                task, category, deadline = item.strip().split('|')
-                print(f"{i}. [{category}] {task} - Due by {deadline}")
+                task, category, deadline, priority = item.strip().split('|')
+                print(f"{i}. [{category}] {task} - Priority: {priority} - Due by {deadline}")
+    print()
+
+def sort_todo_list():
+    print("\nSort To-Do List")
+    print("1. By Priority")
+    print("2. By Deadline")
+    print("3. By Category")
+    choice = input("Enter your choice: ")
+
+    with open('todo_list.txt', 'r') as file:
+        items = file.readlines()
+    if  not items:
+        print("No items found.")
+        return
+    if choice == '1':
+        sorted_items = sorted(items, key=lambda x: x.strip().split('|')[3].lower())
+    elif choice == '2':
+        sorted_items = sorted(items, key=lambda x: x.strip().split('|')[2].lower())
+    elif choice == '3':
+        sorted_items = sorted(items, key=lambda x: x.strip().split('|')[1].lower())
+    else:
+        print("Invalid choice. Returning to main menu.")
+        return
+    
+    print("\n Sorted To-Do List:")
+    for i, item in enumerate(sorted_items, 1):
+        try:
+            task, category, deadline, priority = item.strip().split('|')
+            print(f"{i}. [{category}] {task} - Priority: {priority} - Due by {deadline}\n")
+        except ValueError:
+            print(f"Error in item: {item}")
+    print()
+
+def set_reminder():
+    print("\nSetting Reminders for Upcoming Tasks")
+    reminder_days = int(input("Enter the number of days before the deadline to set a reminder: "))
+    current_date = datetime.now()
+    with open('todo_list.txt', 'r') as file:
+        items = file.readlines()
+        if not items:
+            print("No items found.")
+            return
+        
+        upcoming_tasks = []
+        for item in items:
+            try:
+                task, category, deadline, priority = item.strip().split('|')
+                deadline_date = datetime.strptime(deadline, '%Y-%m-%d')
+                if deadline_date - current_date <= timedelta(days=reminder_days):
+                    upcoming_tasks.append(item.strip())
+            except ValueError:
+                print(f"Error in item: {item}")
+                
+                if not upcoming_tasks:
+                    print(f"No tasks found with deadlines within {reminder_days} days.")
+                else:
+                    print(f"\nUpcoming Tasks with deadlines within {reminder_days} days:")
+                    for i, item in enumerate(upcoming_tasks, 1):
+                        task, category, deadline, priority = item.strip().split('|')
+                        print(f"{i}. [{category}] {task} - Priority: {priority} - Due by {deadline}")
     print()
 
 def main():
@@ -155,6 +221,10 @@ def main():
         elif choice == '8':
             search_todo_items()
         elif choice == '9':
+            sort_todo_list()
+        elif choice == '10':
+            set_reminder()
+        elif choice == '11':
             print('GoodBye.')
             break
         else:
