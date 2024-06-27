@@ -10,7 +10,8 @@ def display_menu():
     print("5. View Completed Item")
     print("6. Remove To-Do Item")
     print("7. View To-Do List by Category")
-    print("8. Exit")
+    print("8. Search To-Do Items by keyword")
+    print("9. Exit")
 
 def view_todo_list():
     print("\nTo-Do List:")
@@ -117,6 +118,22 @@ def view_by_category():
                 print(f"{i}. {task} - Due by {deadline}")
     print()
 
+def search_todo_items():
+    keyword = input("Enter the keyword to search for: ").strip().lower()
+    print(f"\nSearching for items containing '{keyword}':")
+    with open('todo_list.txt', 'r') as file:
+        items = file.readlines()
+        matching_items = []
+        for item in items:
+            if keyword in item.strip().lower():
+                matching_items.append(item.strip())
+        if not matching_items:
+            print(f"No items found containing '{keyword}'.")
+        else:
+            for i, item in enumerate(matching_items, 1):
+                task, category, deadline = item.strip().split('|')
+                print(f"{i}. [{category}] {task} - Due by {deadline}")
+    print()
 
 def main():
     while True:
@@ -137,6 +154,8 @@ def main():
         elif choice == '7':
             view_by_category()
         elif choice == '8':
+            search_todo_items()
+        elif choice == '9':
             print('GoodBye.')
             break
         else:
