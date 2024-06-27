@@ -5,8 +5,9 @@ def display_menu():
     print("======================")
     print("1. View To-Do List")
     print("2. Add To-Do Item")
-    print("3. Remove To-Do Item")
-    print("4. Exit")
+    print("3. Edit To-Do Item")
+    print("4. Remove To-Do Item")
+    print("5. Exit")
 
 def view_todo_list():
     print("\nTo-Do List:")
@@ -23,9 +24,23 @@ def add_todo_item():
         file.write(f"{item}\n")
     print("To-Do item added successfully.")
 
+def edit_todo_item():
+    view_todo_list()
+    item_number = int(input("Enter the number of the item to edit: "))
+    with open('todo_list.txt', 'r') as file:
+        items = file.readlines()
+    if 0 <item_number<= len(items):
+        new_item = input("Enter the new item: ")
+        items[item_number - 1] = f"{new_item}\n"
+        with open('todo_list.txt', 'w') as file:
+            file.writelines(items)
+        print("Item edited successfully.")
+    else:
+        print("Invalid item number.")
+
 def remove_todo_item():
     view_todo_list()
-    item_number = int(input("Enter te=he number of the item to remove: "))
+    item_number = int(input("Enter the number of the item to remove: "))
     with open('todo_list.txt', 'r') as file:
         items = file.readlines()
     if 0 < item_number <= len(items):
@@ -45,8 +60,10 @@ def main():
         elif choice == '2':
             add_todo_item()
         elif choice == '3':
-            remove_todo_item()
+            edit_todo_item()
         elif choice == '4':
+            remove_todo_item()
+        elif choice == '5':
             print('GoodBye.')
             break
         else:
