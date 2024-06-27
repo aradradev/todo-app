@@ -1,4 +1,5 @@
 def display_menu():
+    print("======================")
     print("To-Do List Application")
     print("======================")
     print("1. View To-Do List")
