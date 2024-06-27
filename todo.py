@@ -21,8 +21,8 @@ def view_todo_list():
         else:
             for i, item in enumerate(items, 1):
                 try:
-                    task, category, deadline = item.strip().split('|')
-                    print(f"{i}. [{category} ] {task} - Due by {deadline}")
+                    task, category, deadline, priority = item.strip().split('|')
+                    print(f"{i}. [{category} ] {task} - Priority: {priority} - Due by {deadline}")
                 except ValueError:
                     print(f"Error in item: {item}")
     print()
@@ -32,8 +32,9 @@ def add_todo_item():
     item = input("Enter a new to-do item: ").strip().lower()
     category = input("Enter a category for this item: ").strip().lower()
     deadline = input("Enter a deadline for this item (YYYY-MM-DD): ")
+    priority = input("Enter the priority for this item (High, Medium, Low): ").strip().lower()
     with open('todo_list.txt', 'a') as file:
-        file.write(f"{item} | {category} | {deadline}\n")
+        file.write(f"{item} | {category} | {deadline} | {priority}\n")
     print("To-Do item added successfully.")
 
 def edit_todo_item():
@@ -45,7 +46,8 @@ def edit_todo_item():
         new_item = input("Enter the new item: ")
         new_category = input("Enter the new category: ")
         new_deadline = input("Enter the new deadline: ")
-        items[item_number - 1] = f"{new_item} | {new_category} | {new_deadline}\n"
+        new_priority = input("Enter the new priority (High, Medium, Low): ")
+        items[item_number - 1] = f"{new_item} | {new_category} | {new_priority} | {new_deadline}\n"
         with open('todo_list.txt', 'w') as file:
             file.writelines(items)
         print("Item edited successfully.")
@@ -76,8 +78,8 @@ def view_completed_items():
         else:
             for i, item in enumerate(completed_items, 1):
                 try:
-                    task, category, deadline = item.strip().split('|')
-                    print(f"{i}. [{category}], {task} - Due by {deadline}")
+                    task, category, deadline, priority = item.strip().split('|')
+                    print(f"{i}. [{category}], {task} - Priority: {priority} - Due by {deadline}")
                 except ValueError:
                     print(f"Error in item: {item}")
                     
@@ -104,7 +106,7 @@ def view_by_category():
         category_items = []
         for item in items:
             try:
-                task, cat, deadline = item.strip().split('|')
+                task, cat, deadline, priority = item.strip().split('|')
                 if cat.strip() == category.strip():
                     category_items.append(item.strip())
             except ValueError:
@@ -114,7 +116,7 @@ def view_by_category():
         else:
             for i, item in enumerate(category_items, 1):
                 task, cat, deadline = item.strip().split('|')
-                print(f"{i}. {task} - Due by {deadline}")
+                print(f"{i}. {task} - Priority: {priority} - Due by {deadline}")
     print()
 
 def search_todo_items():
@@ -130,8 +132,8 @@ def search_todo_items():
             print(f"No items found containing '{keyword}'.")
         else:
             for i, item in enumerate(matching_items, 1):
-                task, category, deadline = item.strip().split('|')
-                print(f"{i}. [{category}] {task} - Due by {deadline}")
+                task, category, deadline, priority = item.strip().split('|')
+                print(f"{i}. [{category}] {task} - Priority: {priority} - Due by {deadline}")
     print()
 
 def main():
