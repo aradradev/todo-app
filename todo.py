@@ -10,7 +10,8 @@ def display_menu():
     print("6. Remove To-Do Item")
     print("7. View To-Do List by Category")
     print("8. Search To-Do Items by keyword")
-    print("9. Exit")
+    print("9. Sort To-Do List")
+    print("10. Exit")
 
 def view_todo_list():
     print("\nTo-Do List:")
@@ -136,6 +137,37 @@ def search_todo_items():
                 print(f"{i}. [{category}] {task} - Priority: {priority} - Due by {deadline}")
     print()
 
+def sort_todo_list():
+    print("\nSort To-Do List")
+    print("1. By Priority")
+    print("2. By Deadline")
+    print("3. By Category")
+    choice = input("Enter your choice: ")
+
+    with open('todo_list.txt', 'r') as file:
+        items = file.readlines()
+    if  not items:
+        print("No items found.")
+        return
+    if choice == '1':
+        sorted_items = sorted(items, key=lambda x: x.strip().split('|')[3].lower())
+    elif choice == '2':
+        sorted_items = sorted(items, key=lambda x: x.strip().split('|')[2].lower())
+    elif choice == '3':
+        sorted_items = sorted(items, key=lambda x: x.strip().split('|')[1].lower())
+    else:
+        print("Invalid choice. Returning to main menu.")
+        return
+    
+    print("\n Sorted To-Do List:")
+    for i, item in enumerate(sorted_items, 1):
+        try:
+            task, category, deadline, priority = item.strip().split('|')
+            print(f"{i}. [{category}] {task} - Priority: {priority} - Due by {deadline}\n")
+        except ValueError:
+            print(f"Error in item: {item}")
+    print()
+
 def main():
     while True:
         display_menu()
@@ -157,6 +189,8 @@ def main():
         elif choice == '8':
             search_todo_items()
         elif choice == '9':
+            sort_todo_list()
+        elif choice == '10':
             print('GoodBye.')
             break
         else:

@@ -1,3 +1,4 @@
 playing football | game | 2024-2-23 | Low
 read book | learning | 2024-06-27 | high
 building app | learning | 2024-07-23 | medium
+attending meeting | learning | 2024-2-21 | low
