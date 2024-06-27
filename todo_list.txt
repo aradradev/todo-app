@@ -1,1 +1,2 @@
-solving dsa
+Playing game | Game
+Learn Python | Education

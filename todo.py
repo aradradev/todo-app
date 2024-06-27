@@ -9,21 +9,27 @@ def display_menu():
     print("4. Mark To-Do Item as Complete")
     print("5. View Completed Item")
     print("6. Remove To-Do Item")
-    print("7. Exit")
+    print("7. View To-Do List by Category")
+    print("8. Exit")
 
 def view_todo_list():
     print("\nTo-Do List:")
     with open('todo_list.txt', 'r') as file:
         items = file.readlines()
         for i, item in enumerate(items, 1):
-            print(f"{i}. {item.strip()}")
+            try:
+                task, category = item.strip().split('|')
+                print(f"{i}. [{category} ] {task}")
+            except ValueError:
+                print(f"Error in item: {item}")
     print()
     
 
 def add_todo_item():
     item = input("Enter a new to-do item: ")
+    category = input("Enter a category for this item: ")
     with open('todo_list.txt', 'a') as file:
-        file.write(f"{item}\n")
+        file.write(f"{item} | {category}\n")
     print("To-Do item added successfully.")
 
 def edit_todo_item():
@@ -33,7 +39,8 @@ def edit_todo_item():
         items = file.readlines()
     if 0 <item_number<= len(items):
         new_item = input("Enter the new item: ")
-        items[item_number - 1] = f"{new_item}\n"
+        new_category = inpute("Enter the new category: ")
+        items[item_number - 1] = f"{new_item} | {new_category}\n"
         with open('todo_list.txt', 'w') as file:
             file.writelines(items)
         print("Item edited successfully.")
@@ -63,7 +70,8 @@ def view_completed_items():
             print("No completed Items.")
         else:
             for i, item in enumerate(completed_items, 1):
-                print(f"{i}. {item.strip()}")
+                task, category = item.strip().split('|')
+                print(f"{i}. [{category}], {item}")
     print()
 
 def remove_todo_item():
@@ -78,6 +86,21 @@ def remove_todo_item():
         print("Item removed successfully.")
     else:
         print("Invalid item number.")
+
+def view_by_category():
+    category = input("Enter the category to view: ")
+    print(f"\nTo-Do List for Category: '{category}':")
+    with open('todo_list.txt', 'r') as file:
+        items = file.readlines()
+        category_items = [item.strip() for item in items if item.strip().endswith(f"|{category}")]
+        if category_items:
+            for i, item in enumerate(category_items, 1):
+                task, category = item.split('|')
+                print(f"{i}. [{category}] {task}")
+        else:
+            print(f"No items found for this category '{category}.")
+    print()
+
 
 def main():
     while True:
@@ -96,6 +119,8 @@ def main():
         elif choice == '6':
             remove_todo_item()
         elif choice == '7':
+            view_by_category()
+        elif choice == '8':
             print('GoodBye.')
             break
         else:
