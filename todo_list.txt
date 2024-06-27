@@ -1,2 +1,5 @@
-Learn python
-commit daily
+learn python | education | 2024-06-27
+playing game | game | 2024-06-28
+going out | hobby | 2024-06-29
+buidling app | education | 2024-06-27
+reading books | learning | 2024-06-27
