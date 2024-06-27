@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 def display_menu():
     print("======================")
     print("To-Do List Application")
@@ -11,7 +13,8 @@ def display_menu():
     print("7. View To-Do List by Category")
     print("8. Search To-Do Items by keyword")
     print("9. Sort To-Do List")
-    print("10. Exit")
+    print("10. Set Reminders for Tasks")
+    print("11. Exit")
 
 def view_todo_list():
     print("\nTo-Do List:")
@@ -168,6 +171,35 @@ def sort_todo_list():
             print(f"Error in item: {item}")
     print()
 
+def set_reminder():
+    print("\nSetting Reminders for Upcoming Tasks")
+    reminder_days = int(input("Enter the number of days before the deadline to set a reminder: "))
+    current_date = datetime.now()
+    with open('todo_list.txt', 'r') as file:
+        items = file.readlines()
+        if not items:
+            print("No items found.")
+            return
+        
+        upcoming_tasks = []
+        for item in items:
+            try:
+                task, category, deadline, priority = item.strip().split('|')
+                deadline_date = datetime.strptime(deadline, '%Y-%m-%d')
+                if deadline_date - current_date <= timedelta(days=reminder_days):
+                    upcoming_tasks.append(item.strip())
+            except ValueError:
+                print(f"Error in item: {item}")
+                
+                if not upcoming_tasks:
+                    print(f"No tasks found with deadlines within {reminder_days} days.")
+                else:
+                    print(f"\nUpcoming Tasks with deadlines within {reminder_days} days:")
+                    for i, item in enumerate(upcoming_tasks, 1):
+                        task, category, deadline, priority = item.strip().split('|')
+                        print(f"{i}. [{category}] {task} - Priority: {priority} - Due by {deadline}")
+    print()
+
 def main():
     while True:
         display_menu()
@@ -191,6 +223,8 @@ def main():
         elif choice == '9':
             sort_todo_list()
         elif choice == '10':
+            set_reminder()
+        elif choice == '11':
             print('GoodBye.')
             break
         else:
