@@ -22,8 +22,9 @@ def view_todo_list(username):
         else:
             for i, item in enumerate(items, 1):
                 try:
-                    task, category, deadline, priority = item.strip().split('|')
-                    print(f"{i}. [{category} ] {task} - Priority: {priority} - Due by {deadline}")
+                    task = json.loads(item.strip())
+                    status = "Completed" if task['completed'] else "Incomplete"
+                    print(f"{i}. [{task['category']} ] {task['task']} - Priority: {task['priority']} - Due by {task['deadline']} - {status}")
                 except ValueError:
                     print(f"Error in item: {item}")
     print()
@@ -33,8 +34,18 @@ def add_todo_item(username):
     category = input("Enter a category for this item: ").strip().lower()
     deadline = input("Enter a deadline for this item (YYYY-MM-DD): ")
     priority = input("Enter the priority for this item (High, Medium, Low): ").strip().lower()
+    if priority not in ['high', 'medium', 'low']:
+        print("Invalid priority. Priority must be High, Medium, or Low.")
+        return
+    task = {
+        'task': item,
+        'category': category,
+        'deadline': deadline,
+        'priority': priority,
+        'completed': False
+    }
     with open(get_todo_file(username), 'a') as file:
-        file.write(f"{item} | {category} | {deadline} | {priority}\n")
+        file.write(f"{json.dumps(task)}\n")
     print("To-Do item added successfully.")
 
 def edit_todo_item(username):
@@ -57,29 +68,37 @@ def edit_todo_item(username):
 def mark_complete(username):
     view_todo_list(username)
     item_number = int(input("Enter the number of the item to mark as complete: "))
-    with open(get_todo_file(username), 'r') as file:
+    todo_file = get_todo_file(username)
+    with open(todo_file, 'r') as file:
         items = file.readlines()
     if 0 < item_number <= len(items):
-        completed_item = items.pop(item_number -1)
-        with open(get_todo_file(username), 'w') as file:
+        task = json.loads(items[item_number -1])
+        task['completed'] = True
+        items[item_number -1] = f"{json.dumps(task)}\n"
+
+        with open(todo_file, 'w') as file:
             file.writelines(items)
-        with open(get_todo_file(username), 'a') as file:
-            file.write(f"{completed_item}")
         print("Item marked as complete.")
     else:
         print("Invalid Item number.")
 
 def view_completed_items(username):
     print("\nCompleted Items:")
-    with open(get_todo_file(username), 'r') as file:
-        completed_items = file.readlines()
+    todo_file = get_todo_file(username)
+    if not os.path.exists(todo_file):
+        print("No items found.")
+        return
+    
+    with open(todo_file, 'r') as file:
+        items = file.readlines()
+        completed_items = [item for item in items if json.loads(item.strip())['completed']]
         if not completed_items:
             print("No completed Items.")
         else:
             for i, item in enumerate(completed_items, 1):
                 try:
-                    task, category, deadline, priority = item.strip().split('|')
-                    print(f"{i}. [{category}], {task} - Priority: {priority} - Due by {deadline}")
+                    task = json.loads(item.strip())
+                    print(f"{i}. [{task['category']}], {task['task']} - Priority: {task['priority']} - Due by {task['deadline']}")
                 except ValueError:
                     print(f"Error in item: {item}")
                     
@@ -207,12 +226,14 @@ def save_to_json(username):
         todo_list = []
         for item in items:
             try:
-                task, category, deadline, priority = item.strip().split('|')
+                task = json.loads(item.strip())
+                status = 'Completed' if task['completed'] else 'Incomplete'
                 todo_list.append({
-                    'task': task,
-                    'category': category,
-                    'deadline': deadline,
-                    'priority': priority
+                    'task': task['task'],
+                    'category': task['category'],
+                    'deadline': task['deadline'],
+                    'priority': task['priority'],
+                    'completed': status
                 })
             except ValueError:
                 print(f"Error in item: {item.strip()}")
