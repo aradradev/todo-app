@@ -1,68 +1,12 @@
 from datetime import datetime, timedelta
 import json
-import getpass
-import hashlib
 import os
 
-#### User Registration Start Here ####
-def register():
-    username = input("Enter Your Username: ")
-    password = getpass.getpass("Enter Your Password: ")
-    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+DATA_DIR = 'data'
 
-    users = load_users()
-    if username in users:
-        print("User already exists. Please Login.")
-        return
-    users[username] = hashed_password
-    save_users(users)
-    print("Registration successful.")
-
-def login():
-    username = input("Enter Your Username: ")
-    password = getpass.getpass("Enter Your Password: ")
-    hashed_password = hashlib.sha256(password.encode()).hexdigest()
-
-    users = load_users()
-    if username not in users or users[username] != hashed_password:
-        print("Invalid username or password.")
-        return None
-    print("Login successful.")
-    return username
-
-def load_users():
-    try:
-        with open('users.json', 'r') as file:
-            return json.load(file)
-    except FileNotFoundError:
-        return {}
-    
-def save_users(users):
-    with open('users.json', 'w') as file:
-        json.dump(users, file, indent=4)
 
 def get_todo_file(username):
-    return f"{username}_todo_list.json"
-
-#### User Registration End Here ####
-
-def display_menu():
-    print("======================")
-    print("To-Do List Application")
-    print("======================")
-    print("1. View To-Do List")
-    print("2. Add To-Do Item")
-    print("3. Edit To-Do Item")
-    print("4. Mark To-Do Item as Complete")
-    print("5. View Completed Item")
-    print("6. Remove To-Do Item")
-    print("7. View To-Do List by Category")
-    print("8. Search To-Do Items by keyword")
-    print("9. Sort To-Do List")
-    print("10. Set Reminders for Tasks")
-    print("11. Save To-Do List")
-    print("12. Load To-Do List")
-    print("13. Exit")
+    return os.path.join(DATA_DIR, f"{username}_todo_list.json")
 
 def view_todo_list(username):
     print("\nTo-Do List:")
@@ -83,7 +27,6 @@ def view_todo_list(username):
                 except ValueError:
                     print(f"Error in item: {item}")
     print()
-    
 
 def add_todo_item(username):
     item = input("Enter a new to-do item: ").strip().lower()
@@ -254,7 +197,12 @@ def set_reminder(username):
     print()
 
 def save_to_json(username):
-    with open(get_todo_file(username), 'r') as file:
+    todo_file = get_todo_file(username)
+    if not os.path.exists(todo_file):
+        print("No To-Do List found. Please add items to the List first.")
+        return
+    
+    with open(todo_file, 'r') as file:
         items = file.readlines()
         todo_list = []
         for item in items:
@@ -268,71 +216,23 @@ def save_to_json(username):
                 })
             except ValueError:
                 print(f"Error in item: {item.strip()}")
-    with open(get_todo_file(username), 'w') as json_file:
+    with open(todo_file, 'w') as json_file:
         json.dump(todo_list, json_file, indent=4)
-    print("To-Do List saved to todo_list.json")
+    print(f"To-Do List saved to: {username}_todo_list.json")
 
 def load_json(username):
+    todo_file = get_todo_file(username)
+    if not os.path.exists(todo_file):
+        print("No To-Do List found. Please add items to the list first.")
+        return
     try:
-        with open(get_todo_file(username), 'r') as json_load:
+        with open(todo_file, 'r') as json_load:
             todo_list = json.load(json_load)
-        with open(get_todo_file(username), 'w') as file:
+        with open(todo_file, 'w') as file:
             for item in todo_list:
                 file.write(f"{item['task']} | {item['category']} | {item['deadline']} | {item['priority']}\n")
-        print("To-Do List loaded from todo_list.json")
+        print(f"To-Do List loaded from {username}_todo_list.json")
+    except json.JSONDecodeError:
+        print("Error reading the JSON file. It may be corrupted.")
     except FileNotFoundError:
         print("No To-Do List found. Please add items to the list first.")
-
-def main():
-    while True:
-        print("*************")
-        print("1. Register")
-        print("2. Login")
-        print("3. Exit")
-        print("*************")
-        choice = input("Enter you choice: ")
-        if choice == '1':
-            register()
-        elif choice == '2':
-            username = login()
-            if username:
-                while True:
-                    display_menu()
-                    choice = input("Enter your choice: ")
-                    if choice == '1':
-                        view_todo_list(username)
-                    elif choice == '2':
-                        add_todo_item(username)
-                    elif choice == '3':
-                        edit_todo_item(username)
-                    elif choice == '4':
-                        mark_complete(username)
-                    elif choice == '5':
-                        view_completed_items(username)
-                    elif choice == '6':
-                        remove_todo_item(username)
-                    elif choice == '7':
-                        view_by_category(username)
-                    elif choice == '8':
-                        search_todo_items(username)
-                    elif choice == '9':
-                        sort_todo_list(username)
-                    elif choice == '10':
-                        set_reminder(username)
-                    elif choice == '11':
-                        save_to_json(username)
-                    elif choice == '12':
-                        load_json(username)
-                    elif choice == '13':
-                        print('GoodBye.')
-                        break
-                    else:
-                        print("Invalid choice. Please try again.\n")
-        elif choice == '3':
-            print("GoodBye.")
-            break
-        else:
-            print("Invalid choice. Please try again.\n")
-
-if __name__ == "__main__":
-    main()
