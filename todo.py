@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import json
 
 def display_menu():
     print("======================")
@@ -14,7 +15,9 @@ def display_menu():
     print("8. Search To-Do Items by keyword")
     print("9. Sort To-Do List")
     print("10. Set Reminders for Tasks")
-    print("11. Exit")
+    print("11. Save To-Do List")
+    print("12. Load To-Do List")
+    print("13. Exit")
 
 def view_todo_list():
     print("\nTo-Do List:")
@@ -200,6 +203,36 @@ def set_reminder():
                         print(f"{i}. [{category}] {task} - Priority: {priority} - Due by {deadline}")
     print()
 
+def save_to_json():
+    with open('todo_list.txt', 'r') as file:
+        items = file.readlines()
+        todo_list = []
+        for item in items:
+            try:
+                task, category, deadline, priority = item.strip().split('|')
+                todo_list.append({
+                    'task': task,
+                    'category': category,
+                    'deadline': deadline,
+                    'priority': priority
+                })
+            except ValueError:
+                print(f"Error in item: {item.strip()}")
+    with open('todo_list.json', 'w') as json_file:
+        json.dump(todo_list, json_file, indent=4)
+    print("To-Do List saved to todo_list.json")
+
+def load_json():
+    try:
+        with open('todo_list.json', 'r') as json_load:
+            todo_list = json.load(json_load)
+        with open('todo_list.txt', 'w') as file:
+            for item in todo_list:
+                file.write(f"{item['task']} | {item['category']} | {item['deadline']} | {item['priority']}\n")
+        print("To-Do List loaded from todo_list.json")
+    except FileNotFoundError:
+        print("No To-Do List found. Please add items to the list first.")
+
 def main():
     while True:
         display_menu()
@@ -225,6 +258,10 @@ def main():
         elif choice == '10':
             set_reminder()
         elif choice == '11':
+            save_to_json()
+        elif choice == '12':
+            load_json()
+        elif choice == '13':
             print('GoodBye.')
             break
         else:
