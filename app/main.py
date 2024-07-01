@@ -47,13 +47,12 @@ def main():
                         load_json(username)
                     elif choice == '13':
                         print("Exiting the display menu.")
-                        print('GoodBye.')
+                        print(f'GoodBye {username}.\n')
                         break
                     else:
                         print("Invalid choice. Please try again.\n")
         elif choice == '3':
-            print("Exiting the Registration page.")
-            print("GoodBye.")
+            print("Exiting the Registration page.\n")
             break
         else:
             print("Invalid choice. Please try again.\n")

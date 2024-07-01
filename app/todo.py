@@ -230,7 +230,7 @@ def load_json(username):
             todo_list = json.load(json_load)
         with open(todo_file, 'w') as file:
             for item in todo_list:
-                file.write(f"{item['task']} | {item['category']} | {item['deadline']} | {item['priority']}\n")
+                file.write(f"{item['task']} | {item['category']} | {item['deadline']} | {item['priority']}\n").strip()
         print(f"To-Do List loaded from {username}_todo_list.json")
     except json.JSONDecodeError:
         print("Error reading the JSON file. It may be corrupted.")
