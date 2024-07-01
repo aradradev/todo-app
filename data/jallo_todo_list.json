@@ -1,1 +1,16 @@
-new item | new category | 2024-09-10 | low
+[
+    {
+        "task": "new item",
+        "category": "new cat item",
+        "deadline": "2023-09-09",
+        "priority": "low",
+        "completed": "Completed"
+    },
+    {
+        "task": "hobby",
+        "category": "cat hobby",
+        "deadline": "2024-10-01",
+        "priority": "high",
+        "completed": "Incomplete"
+    }
+]

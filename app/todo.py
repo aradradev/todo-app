@@ -6,7 +6,7 @@ DATA_DIR = 'data'
 
 
 def get_todo_file(username):
-    return os.path.join(DATA_DIR, f"{username}_todo_list.json")
+    return os.path.join(DATA_DIR, f"{username}_todo_list.txt")
 
 def view_todo_list(username):
     print("\nTo-Do List:")
@@ -217,6 +217,7 @@ def set_reminder(username):
 
 def save_to_json(username):
     todo_file = get_todo_file(username)
+    json_file = os.path.join(DATA_DIR, f"{username}_todo_list.json")
     if not os.path.exists(todo_file):
         print("No To-Do List found. Please add items to the List first.")
         return
@@ -237,21 +238,22 @@ def save_to_json(username):
                 })
             except ValueError:
                 print(f"Error in item: {item.strip()}")
-    with open(todo_file, 'w') as json_file:
-        json.dump(todo_list, json_file, indent=4)
+    with open(json_file, 'w') as json_out:
+        json.dump(todo_list, json_out, indent=4)
     print(f"To-Do List saved to: {username}_todo_list.json")
 
 def load_json(username):
     todo_file = get_todo_file(username)
+    json_file = os.path.join(DATA_DIR, f"{username}_todo_list.json")
     if not os.path.exists(todo_file):
         print("No To-Do List found. Please add items to the list first.")
         return
     try:
-        with open(todo_file, 'r') as json_load:
-            todo_list = json.load(json_load)
+        with open(json_file, 'r') as json_in:
+            todo_list = json.load(json_in)
         with open(todo_file, 'w') as file:
             for item in todo_list:
-                file.write(f"{item['task']} | {item['category']} | {item['deadline']} | {item['priority']}\n").strip()
+                file.write(json.dumps(item))
         print(f"To-Do List loaded from {username}_todo_list.json")
     except json.JSONDecodeError:
         print("Error reading the JSON file. It may be corrupted.")
