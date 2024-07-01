@@ -1,0 +1,14 @@
+[
+    {
+        "task": "learn python ",
+        "category": " learning ",
+        "deadline": " 2024-06-28 ",
+        "priority": " low"
+    },
+    {
+        "task": "attend meeting ",
+        "category": " learning ",
+        "deadline": " 2024-03-23 ",
+        "priority": " low"
+    }
+]
