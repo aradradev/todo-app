@@ -1,14 +1,8 @@
 [
     {
-        "task": "new item ",
-        "category": " new category item ",
-        "deadline": " 2024-09-09 ",
-        "priority": " low"
-    },
-    {
-        "task": "watching movies ",
-        "category": " hobby ",
-        "deadline": " 2024-12-09 ",
-        "priority": " medium"
+        "task": "new item   ",
+        "category": "   new category   ",
+        "deadline": "   2023-02-09   ",
+        "priority": "   low"
     }
 ]
