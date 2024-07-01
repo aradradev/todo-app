@@ -1,9 +1,9 @@
-from app.user import register, login
-from app.todo import (view_todo_list, add_todo_item, 
+from .user import (register, login)
+from .todo import (view_todo_list, add_todo_item, 
                       edit_todo_item, mark_complete, view_completed_items,
                       view_by_category, remove_todo_item, set_reminder,
                       load_json, save_to_json, sort_todo_list, search_todo_items)
-from app.utils import display_menu
+from .utils import display_menu
 
 def main():
     while True:
@@ -46,11 +46,13 @@ def main():
                     elif choice == '12':
                         load_json(username)
                     elif choice == '13':
+                        print("Exiting the display menu.")
                         print('GoodBye.')
                         break
                     else:
                         print("Invalid choice. Please try again.\n")
         elif choice == '3':
+            print("Exiting the Registration page.")
             print("GoodBye.")
             break
         else:

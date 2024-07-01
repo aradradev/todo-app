@@ -2,12 +2,11 @@ from datetime import datetime, timedelta
 import json
 import os
 
-
-
+DATA_DIR = 'data'
 
 
 def get_todo_file(username):
-    return f"{username}_todo_list.json"
+    return os.path.join(DATA_DIR, f"{username}_todo_list.json")
 
 def view_todo_list(username):
     print("\nTo-Do List:")
@@ -198,7 +197,12 @@ def set_reminder(username):
     print()
 
 def save_to_json(username):
-    with open(get_todo_file(username), 'r') as file:
+    todo_file = get_todo_file(username)
+    if not os.path.exists(todo_file):
+        print("No To-Do List found. Please add items to the List first.")
+        return
+    
+    with open(todo_file, 'r') as file:
         items = file.readlines()
         todo_list = []
         for item in items:
@@ -212,20 +216,23 @@ def save_to_json(username):
                 })
             except ValueError:
                 print(f"Error in item: {item.strip()}")
-    with open(get_todo_file(username), 'w') as json_file:
+    with open(todo_file, 'w') as json_file:
         json.dump(todo_list, json_file, indent=4)
-    print("To-Do List saved to todo_list.json")
+    print(f"To-Do List saved to: {username}_todo_list.json")
 
 def load_json(username):
+    todo_file = get_todo_file(username)
+    if not os.path.exists(todo_file):
+        print("No To-Do List found. Please add items to the list first.")
+        return
     try:
-        with open(get_todo_file(username), 'r') as json_load:
+        with open(todo_file, 'r') as json_load:
             todo_list = json.load(json_load)
-        with open(get_todo_file(username), 'w') as file:
+        with open(todo_file, 'w') as file:
             for item in todo_list:
                 file.write(f"{item['task']} | {item['category']} | {item['deadline']} | {item['priority']}\n")
-        print("To-Do List loaded from todo_list.json")
+        print(f"To-Do List loaded from {username}todo_list.json")
+    except json.JSONDecodeError:
+        print("Error reading the JSON file. It may be corrupted.")
     except FileNotFoundError:
         print("No To-Do List found. Please add items to the list first.")
-
-if __name__ == "__main__":
-    main()
