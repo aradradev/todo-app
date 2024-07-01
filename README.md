@@ -15,6 +15,17 @@
   - [💻 Getting Started ](#-getting-started-)
     - [Prerequisites](#prerequisites)
     - [Setup](#setup)
+    - [Install](#install)
+    - [Usage](#usage)
+- [Run tests](#run-tests)
+    - [Deployment](#deployment)
+  - [👥 Authors ](#-authors-)
+  - [🔭 Future Features ](#-future-features-)
+  - [🤝 Contributing ](#-contributing-)
+  - [⭐️ Show your support ](#️-show-your-support-)
+  - [🙏 Acknowledgments ](#-acknowledgments-)
+  - [❓ FAQ (OPTIONAL) ](#-faq-optional-)
+  - [📝 License ](#-license-)
 
 # 📖 Todo List App <a name="about-project"></a>
 
@@ -42,7 +53,7 @@
 
 ## 🚀 Live Demo <a name="live-demo"></a>
 
-- [Live Demo Link](https://your-live-demo-url.com)
+- [Not LIVE YET]()
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -62,72 +73,101 @@ Clone this repository to your desired folder:
 ```sh
   git clone https://github.com/aradradev/todo-app.git
   cd todo-app
-Install
-Install the required packages:
-
-sh
-Copier le code
-  pip install -r requirements.txt
-Usage
-Run the application:
-
-sh
-Copier le code
-  python main.py
-Run tests
-To run tests, use:
-
-sh
-Copier le code
-  python -m unittest discover tests
-Deployment
-You can deploy this project using:
-
-sh
-Copier le code
-  # Example command to create a virtual environment
-  python -m venv venv
-  source venv/bin/activate
-  pip install -r requirements.txt
-  python main.py
 ```
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-👥 Authors <a name="authors"></a>
-👤 Abdourahmane Diallo
 
-GitHub: @aradradev
-Twitter: @Abdoul_2023
-LinkedIn: Abdourahmane Diallo
+### Install
+Install the required packages by running the following command in the root directory of the project:
+```
+    pip install -r requirements.txt
+```
+
+### Usage
+To run the application, run the following command in the root directory of the project:
+```
+    python run_app.py
+```
+
+# Run tests
+To run tests, run the following command in the root directory of the project:
+```
+    python -m unittest discover tests
+```
+
+### Deployment
+To deploy the application, follow these steps:
+1. Install the required packages by running the following command in the root directory of the project:
+```
+   # Example command to create a virtual environment
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   python run_app.py
+```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-🔭 Future Features <a name="future-features"></a>
- Add user authentication
- Integrate with a database
- Implement a graphical user interface (GUI)
+
+<!-- AUTHORS -->
+
+## 👥 Authors <a name="author"></a>
+👤 **Jalloh**
+
+- GitHub: [@aradradev](https://github.com/aradradev)
+- LinkedIn: [Abdourahmane Jalloh](https://www.linkedin.com/in/abdul-jalloh)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-🤝 Contributing <a name="contributing"></a>
+
+<!-- FUTURE FEATURES -->
+
+## 🔭 Future Features <a name="future-features"></a>
+- [ ] Add user authentication
+- [ ] Integrate with a database
+- [ ] Implement a graphical user interface (GUI)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- CONTRIBUTING -->
+
+## 🤝 Contributing <a name="contributing"></a>
+
 Contributions, issues, and feature requests are welcome!
 
-Feel free to check the issues page.
+Feel free to check the [issues page](../../issues/).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-⭐️ Show your support <a name="support"></a>
-If you like this project, please give it a star!
+
+
+<!-- SUPPORT -->
+
+## ⭐️ Show your support <a name="support"></a>
+
+If you like this project please give it a star!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-🙏 Acknowledgements <a name="acknowledgements"></a>
-I would like to thank Microverse for this exercise.
+
+<!-- ACKNOWLEDGEMENTS -->
+
+## 🙏 Acknowledgments <a name="acknowledgements"></a>
+
+I would like to thank Microverse for this project.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-❓ FAQ (OPTIONAL) <a name="faq"></a>
-How do I add a new task?
 
-To add a new task, run the application and follow the prompts to enter task details.
-Can I edit a task?
+## ❓ FAQ (OPTIONAL) <a name="faq"></a>
 
-Yes, you can edit a task by selecting the task you want to edit and updating the details.
+- **How do I add a new task?**
+
+  To add a new task, run the application and follow the prompts to enter task details.
+
+- **Can I edit a task?**
+
+  Yes, you can edit a task by selecting the task you want to edit and updating the details.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-📝 License <a name="license"></a>
-This project is MIT licensed.
+
+<!-- LICENSE -->
+
+## 📝 License <a name="license"></a>
+
+This project is [MIT](./LICENSE) licensed.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-```
