@@ -1,5 +1,50 @@
 from datetime import datetime, timedelta
 import json
+import getpass
+import hashlib
+import os
+
+#### User Registration Start Here ####
+def register():
+    username = input("Enter Your Username: ")
+    password = getpass.getpass("Enter Your Password: ")
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+
+    users = load_users()
+    if username in users:
+        print("User already exists. Please Login.")
+        return
+    users[username] = hashed_password
+    save_users(users)
+    print("Registration successful.")
+
+def login():
+    username = input("Enter Your Username: ")
+    password = getpass.getpass("Enter Your Password: ")
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+
+    users = load_users()
+    if username not in users or users[username] != hashed_password:
+        print("Invalid username or password.")
+        return None
+    print("Login successful.")
+    return username
+
+def load_users():
+    try:
+        with open('users.json', 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return {}
+    
+def save_users(users):
+    with open('users.json', 'w') as file:
+        json.dump(users, file, indent=4)
+
+def get_todo_file(username):
+    return f"{username}_todo_list.json"
+
+#### User Registration End Here ####
 
 def display_menu():
     print("======================")
@@ -19,9 +64,14 @@ def display_menu():
     print("12. Load To-Do List")
     print("13. Exit")
 
-def view_todo_list():
+def view_todo_list(username):
     print("\nTo-Do List:")
-    with open('todo_list.txt', 'r') as file:
+    todo_file = get_todo_file(username)
+    if not os.path.exists(todo_file):
+        print("No items found.")
+        return
+    
+    with open(todo_file, 'r') as file:
         items = file.readlines()
         if not items:
             print("No items found.")
@@ -35,19 +85,19 @@ def view_todo_list():
     print()
     
 
-def add_todo_item():
+def add_todo_item(username):
     item = input("Enter a new to-do item: ").strip().lower()
     category = input("Enter a category for this item: ").strip().lower()
     deadline = input("Enter a deadline for this item (YYYY-MM-DD): ")
     priority = input("Enter the priority for this item (High, Medium, Low): ").strip().lower()
-    with open('todo_list.txt', 'a') as file:
+    with open(get_todo_file(username), 'a') as file:
         file.write(f"{item} | {category} | {deadline} | {priority}\n")
     print("To-Do item added successfully.")
 
-def edit_todo_item():
-    view_todo_list()
+def edit_todo_item(username):
+    view_todo_list(username)
     item_number = int(input("Enter the number of the item to edit: "))
-    with open('todo_list.txt', 'r') as file:
+    with open(get_todo_file(username), 'r') as file:
         items = file.readlines()
     if 0 <item_number<= len(items):
         new_item = input("Enter the new item: ")
@@ -55,30 +105,30 @@ def edit_todo_item():
         new_deadline = input("Enter the new deadline: ")
         new_priority = input("Enter the new priority (High, Medium, Low): ")
         items[item_number - 1] = f"{new_item} | {new_category} | {new_priority} | {new_deadline}\n"
-        with open('todo_list.txt', 'w') as file:
+        with open(get_todo_file(username), 'w') as file:
             file.writelines(items)
         print("Item edited successfully.")
     else:
         print("Invalid item number.")
 
-def mark_complete():
-    view_todo_list()
+def mark_complete(username):
+    view_todo_list(username)
     item_number = int(input("Enter the number of the item to mark as complete: "))
-    with open('todo_list.txt', 'r') as file:
+    with open(get_todo_file(username), 'r') as file:
         items = file.readlines()
     if 0 < item_number <= len(items):
         completed_item = items.pop(item_number -1)
-        with open('todo_list.txt', 'w') as file:
+        with open(get_todo_file(username), 'w') as file:
             file.writelines(items)
-        with open('completed_list.txt', 'a') as file:
+        with open(get_todo_file(username), 'a') as file:
             file.write(f"{completed_item}")
         print("Item marked as complete.")
     else:
         print("Invalid Item number.")
 
-def view_completed_items():
+def view_completed_items(username):
     print("\nCompleted Items:")
-    with open('completed_list.txt', 'r') as file:
+    with open(get_todo_file(username), 'r') as file:
         completed_items = file.readlines()
         if not completed_items:
             print("No completed Items.")
@@ -92,23 +142,23 @@ def view_completed_items():
                     
     print()
 
-def remove_todo_item():
-    view_todo_list()
+def remove_todo_item(username):
+    view_todo_list(username)
     item_number = int(input("Enter the number of the item to remove: "))
-    with open('todo_list.txt', 'r') as file:
+    with open(get_todo_file(username), 'r') as file:
         items = file.readlines()
     if 0 < item_number <= len(items):
         del items[item_number - 1]
-        with open('todo_list.txt', 'w') as file:
+        with open(get_todo_file(username), 'w') as file:
             file.writelines(items)
         print("Item removed successfully.")
     else:
         print("Invalid item number.")
 
-def view_by_category():
+def view_by_category(username):
     category = input("Enter the category to view: ").strip().lower()
     print(f"\nTo-Do List for Category: '{category}':")
-    with open('todo_list.txt', 'r') as file:
+    with open(get_todo_file(username), 'r') as file:
         items = file.readlines()
         category_items = []
         for item in items:
@@ -126,10 +176,10 @@ def view_by_category():
                 print(f"{i}. {task} - Priority: {priority} - Due by {deadline}")
     print()
 
-def search_todo_items():
+def search_todo_items(username):
     keyword = input("Enter the keyword to search for: ").strip().lower()
     print(f"\nSearching for items containing '{keyword}':")
-    with open('todo_list.txt', 'r') as file:
+    with open(get_todo_file(username), 'r') as file:
         items = file.readlines()
         matching_items = []
         for item in items:
@@ -143,14 +193,14 @@ def search_todo_items():
                 print(f"{i}. [{category}] {task} - Priority: {priority} - Due by {deadline}")
     print()
 
-def sort_todo_list():
+def sort_todo_list(username):
     print("\nSort To-Do List")
     print("1. By Priority")
     print("2. By Deadline")
     print("3. By Category")
     choice = input("Enter your choice: ")
 
-    with open('todo_list.txt', 'r') as file:
+    with open(username, 'r') as file:
         items = file.readlines()
     if  not items:
         print("No items found.")
@@ -174,11 +224,11 @@ def sort_todo_list():
             print(f"Error in item: {item}")
     print()
 
-def set_reminder():
+def set_reminder(username):
     print("\nSetting Reminders for Upcoming Tasks")
     reminder_days = int(input("Enter the number of days before the deadline to set a reminder: "))
     current_date = datetime.now()
-    with open('todo_list.txt', 'r') as file:
+    with open(get_todo_file(username), 'r') as file:
         items = file.readlines()
         if not items:
             print("No items found.")
@@ -203,8 +253,8 @@ def set_reminder():
                         print(f"{i}. [{category}] {task} - Priority: {priority} - Due by {deadline}")
     print()
 
-def save_to_json():
-    with open('todo_list.txt', 'r') as file:
+def save_to_json(username):
+    with open(get_todo_file(username), 'r') as file:
         items = file.readlines()
         todo_list = []
         for item in items:
@@ -218,15 +268,15 @@ def save_to_json():
                 })
             except ValueError:
                 print(f"Error in item: {item.strip()}")
-    with open('todo_list.json', 'w') as json_file:
+    with open(get_todo_file(username), 'w') as json_file:
         json.dump(todo_list, json_file, indent=4)
     print("To-Do List saved to todo_list.json")
 
-def load_json():
+def load_json(username):
     try:
-        with open('todo_list.json', 'r') as json_load:
+        with open(get_todo_file(username), 'r') as json_load:
             todo_list = json.load(json_load)
-        with open('todo_list.txt', 'w') as file:
+        with open(get_todo_file(username), 'w') as file:
             for item in todo_list:
                 file.write(f"{item['task']} | {item['category']} | {item['deadline']} | {item['priority']}\n")
         print("To-Do List loaded from todo_list.json")
@@ -235,34 +285,51 @@ def load_json():
 
 def main():
     while True:
-        display_menu()
-        choice = input("Enter your choice: ")
+        print("*************")
+        print("1. Register")
+        print("2. Login")
+        print("3. Exit")
+        print("*************")
+        choice = input("Enter you choice: ")
         if choice == '1':
-            view_todo_list()
+            register()
         elif choice == '2':
-            add_todo_item()
+            username = login()
+            if username:
+                while True:
+                    display_menu()
+                    choice = input("Enter your choice: ")
+                    if choice == '1':
+                        view_todo_list(username)
+                    elif choice == '2':
+                        add_todo_item(username)
+                    elif choice == '3':
+                        edit_todo_item(username)
+                    elif choice == '4':
+                        mark_complete(username)
+                    elif choice == '5':
+                        view_completed_items(username)
+                    elif choice == '6':
+                        remove_todo_item(username)
+                    elif choice == '7':
+                        view_by_category(username)
+                    elif choice == '8':
+                        search_todo_items(username)
+                    elif choice == '9':
+                        sort_todo_list(username)
+                    elif choice == '10':
+                        set_reminder(username)
+                    elif choice == '11':
+                        save_to_json(username)
+                    elif choice == '12':
+                        load_json(username)
+                    elif choice == '13':
+                        print('GoodBye.')
+                        break
+                    else:
+                        print("Invalid choice. Please try again.\n")
         elif choice == '3':
-            edit_todo_item()
-        elif choice == '4':
-            mark_complete()
-        elif choice == '5':
-            view_completed_items()
-        elif choice == '6':
-            remove_todo_item()
-        elif choice == '7':
-            view_by_category()
-        elif choice == '8':
-            search_todo_items()
-        elif choice == '9':
-            sort_todo_list()
-        elif choice == '10':
-            set_reminder()
-        elif choice == '11':
-            save_to_json()
-        elif choice == '12':
-            load_json()
-        elif choice == '13':
-            print('GoodBye.')
+            print("GoodBye.")
             break
         else:
             print("Invalid choice. Please try again.\n")
