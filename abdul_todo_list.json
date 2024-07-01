@@ -1,0 +1,14 @@
+[
+    {
+        "task": "watching tv show ",
+        "category": " hobby ",
+        "deadline": " 2024-07-01 ",
+        "priority": " low"
+    },
+    {
+        "task": "building projects ",
+        "category": " learn ",
+        "deadline": " 2023-07-02 ",
+        "priority": " medium"
+    }
+]
