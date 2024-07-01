@@ -6,7 +6,7 @@
 
 # 📗 Table of Contents
 
-- [� Table of Contents](#-table-of-contents)
+- [📗 Table of Contents](#-table-of-contents)
 - [📖 Todo List App ](#-todo-list-app-)
   - [🛠 Built With ](#-built-with-)
     - [Tech Stack ](#tech-stack-)
@@ -90,6 +90,7 @@ Copier le code
   source venv/bin/activate
   pip install -r requirements.txt
   python main.py
+```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 👥 Authors <a name="authors"></a>
 👤 Abdourahmane Diallo
