@@ -23,6 +23,16 @@ def add_task():
     else:
         messagebox.showerror("Incomplete Data", "Please fill out all fields.")
 
+# Remove task function
+def remove_task():
+    # Get the selected task from the listbox
+    try:
+        selected_task_index = task_listbox.curselection()[0]
+        task_listbox.delete(selected_task_index)
+        messagebox.showinfo("Task Removed", "Your task has been removed successfully!")
+    except IndexError:
+        messagebox.showerror("No Selection", "Please select a task to remove.")
+
 # Initialize the main window
 window = tk.Tk()
 
@@ -61,6 +71,10 @@ priority_entry.pack(pady=5)
 # Button to add task
 add_task_button = tk.Button(frame, text="Add Task", width="15", command=add_task)
 add_task_button.pack(pady=10)
+
+# Button to remove task
+remove_task_button = tk.Button(frame, text="Remove Task", width="15", command=remove_task)
+remove_task_button.pack(pady=10)
 
 # List box to display tasks
 task_listbox = tk.Listbox(frame, width=80, height=10)
