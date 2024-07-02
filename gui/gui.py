@@ -15,4 +15,9 @@ frame.pack(pady=20)
 title_label = tk.Label(frame, text="To-Do List", font=("Helvetica", 18))
 title_label.pack()
 
+# Entry for task input
+task_entry = tk.Entry(frame, width=30)
+task_entry.insert(0, "Enter your task")
+task_entry.pack(pady=5)
+
 window.mainloop()
