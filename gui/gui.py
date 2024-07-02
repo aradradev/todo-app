@@ -20,7 +20,7 @@ task_entry = tk.Entry(frame, width=30)
 task_entry.insert(0, "Enter your task")
 task_entry.pack(pady=5)
 
-# Entry for category
+# Entry for category input
 category_entry = tk.Entry(frame, width=30)
 category_entry.insert(0, "Enter your category")
 category_entry.pack(pady=5)
