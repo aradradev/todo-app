@@ -11,7 +11,7 @@ def add_task():
 
     if task and category and deadline and priority:
         # Add the task to the list
-        print(f"Task: {task}, Category: {category}, Deadline: {deadline}, Priority: {priority}")
+        task_listbox.insert(tk.END, f"Task: {task}, Category: {category}, Deadline: {deadline}, Priority: {priority}")
         messagebox.showinfo("Task Added", "Your task has been added successfully!")
 
         # Clear the entries
@@ -28,7 +28,7 @@ window = tk.Tk()
 
 window.title('To-Do App')
 
-window.geometry('500x400')
+window.geometry('600x400')
 
 # Create a frame to hold the widget
 frame = tk.Frame(window)
@@ -61,5 +61,9 @@ priority_entry.pack(pady=5)
 # Button to add task
 add_task_button = tk.Button(frame, text="Add Task", width="15", command=add_task)
 add_task_button.pack(pady=10)
+
+# List box to display tasks
+task_listbox = tk.Listbox(frame, width=80, height=10)
+task_listbox.pack(pady=10)
 
 window.mainloop()
