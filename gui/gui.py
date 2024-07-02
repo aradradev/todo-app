@@ -25,4 +25,9 @@ category_entry = tk.Entry(frame, width=30)
 category_entry.insert(0, "Enter your category")
 category_entry.pack(pady=5)
 
+# Entry for deadline input
+deadline_entry = tk.Entry(frame, width=30)
+deadline_entry.insert(0, "Enter your deadline")
+deadline_entry.pack(pady=5)
+
 window.mainloop()
