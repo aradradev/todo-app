@@ -1,4 +1,27 @@
 import tkinter as tk
+from tkinter import messagebox
+
+# Add function to proceed the input
+def add_task():
+    # Get the input from the user
+    task = task_entry.get()
+    category = category_entry.get()
+    deadline = deadline_entry.get()
+    priority = priority_entry.get()
+
+    if task and category and deadline and priority:
+        # Add the task to the list
+        print(f"Task: {task}, Category: {category}, Deadline: {deadline}, Priority: {priority}")
+        messagebox.showinfo("Task Added", "Your task has been added successfully!")
+
+        # Clear the entries
+        task_entry.delete(0, tk.END)
+        category_entry.delete(0, tk.END)
+        deadline_entry.delete(0, tk.END)
+        priority_entry.delete(0, tk.END)
+
+    else:
+        messagebox.showerror("Incomplete Data", "Please fill out all fields.")
 
 # Initialize the main window
 window = tk.Tk()
@@ -36,7 +59,7 @@ priority_entry.insert(0, "Enter priority")
 priority_entry.pack(pady=5)
 
 # Button to add task
-add_task_button = tk.Button(frame, text="Add Task", width="15")
+add_task_button = tk.Button(frame, text="Add Task", width="15", command=add_task)
 add_task_button.pack(pady=10)
 
 window.mainloop()
