@@ -33,6 +33,28 @@ def remove_task():
     except IndexError:
         messagebox.showerror("No Selection", "Please select a task to remove.")
 
+# Edit task function
+def edit_task():
+    # Get the selected task from the listbox
+    try:
+        selected_task_index = task_listbox.curselection()[0]
+        selected_task = task_listbox.get(selected_task_index)
+
+        task_details = selected_task.split(", ")
+        task_entry.delete(0, tk.END)
+        category_entry.delete(0, tk.END)
+        deadline_entry.delete(0, tk.END)
+        priority_entry.delete(0, tk.END)
+
+        task_entry.insert(0, task_details[0].split(": ")[1])
+        category_entry.insert(0, task_details[1].split(": ")[1])
+        deadline_entry.insert(0, task_details[2].split(": ")[1])
+        priority_entry.insert(0, task_details[3].split(": ")[1])
+
+        task_listbox.delete(selected_task_index)
+    except IndexError:
+        messagebox.showerror("No Selection", "Please select a task to edit.")
+
 # Initialize the main window
 window = tk.Tk()
 
@@ -71,6 +93,10 @@ priority_entry.pack(pady=5)
 # Button to add task
 add_task_button = tk.Button(frame, text="Add Task", width="15", command=add_task)
 add_task_button.pack(pady=10)
+
+# Button to edit task
+edit_task_button = tk.Button(frame, text="Edit Task", width="15", command=edit_task)
+edit_task_button.pack(pady=10)
 
 # Button to remove task
 remove_task_button = tk.Button(frame, text="Remove Task", width="15", command=remove_task)
