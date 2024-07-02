@@ -30,4 +30,8 @@ deadline_entry = tk.Entry(frame, width=30)
 deadline_entry.insert(0, "Enter your deadline")
 deadline_entry.pack(pady=5)
 
+# Button to add task
+add_task_button = tk.Button(frame, text="Add Task", width="15")
+add_task_button.pack(pady=10)
+
 window.mainloop()
