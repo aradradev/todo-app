@@ -1,0 +1,23 @@
+[
+    {
+        "task": "Enter your task",
+        "category": "Personal",
+        "deadline": "Enter deadline",
+        "priority": "Enter priority",
+        "complete": true
+    },
+    {
+        "task": "new task",
+        "category": "Work",
+        "deadline": "new deadline",
+        "priority": "new priority",
+        "complete": false
+    },
+    {
+        "task": "another task",
+        "category": "Shopping",
+        "deadline": "another deadline",
+        "priority": "another priority",
+        "complete": true
+    }
+]
