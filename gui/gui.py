@@ -1,6 +1,13 @@
 import json
+import os
 import tkinter as tk
 from tkinter import messagebox
+
+DATA_DIR = 'data'
+def get_todo_file():
+    if not os.path.exists(DATA_DIR):
+        os.makedirs(DATA_DIR)
+    return os.path.join(DATA_DIR, 'tasks.json')
 
 # Add function to proceed the input
 def add_task():
@@ -105,16 +112,29 @@ def view_completed_tasks():
 
 # Save tasks function
 def save_tasks():
-    with open('tasks.json', 'w') as file:
-        json.dump(all_tasks, file)
+    todo_file = get_todo_file()
+    with open(todo_file, 'w') as file:
+        json.dump(all_tasks, file, indent=4)
     messagebox.showinfo("Save Tasks", "Tasks saved successfully!")
+
+# Load tasks function
+def load_tasks():
+    todo_file = get_todo_file()
+    global all_tasks
+    try:
+        with open(todo_file, 'r') as file:
+            all_tasks = json.load(file)
+        display_all_tasks()
+        messagebox.showinfo("Load Tasks", "Tasks loaded successfully!")
+    except FileNotFoundError:
+        messagebox.showerror("No Tasks", "There are no tasks to load.")
 
 # Initialize the main window
 window = tk.Tk()
 
 window.title('To-Do App')
 
-window.geometry('600x500')
+window.geometry('700x600')
 
 # Create a frame to hold the widget
 frame = tk.Frame(window)
@@ -163,10 +183,15 @@ mark_complete_button.pack(pady=5)
 
 # Button to view completed task
 view_complete_button = tk.Button(frame, text="View Complete", width=15, command=view_completed_tasks)
-view_completed_button.pack(pady=5)
+view_complete_button.pack(pady=5)
 
 # Button to save tasks
 save_task_button = tk.Button(frame, text="Save Task", width=15, command=save_tasks)
+save_task_button.pack(pady=5)
+
+# Button to load tasks
+load_task_button = tk.Button(frame, text="Load Task", width=15, command=load_tasks)
+load_task_button.pack(pady=5)
 
 # Button to remove task
 remove_task_button = tk.Button(frame, text="Remove Task", width=15, command=remove_task)
