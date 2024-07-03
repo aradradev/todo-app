@@ -12,7 +12,7 @@ def add_task():
     if task and category and deadline and priority:
         # Add the task to the list
         task_listbox.insert(tk.END, f"Task: {task}, Category: {category}, Deadline: {deadline}, Priority: {priority}")
-        all_tasks.append(f"Task: {task}, Category: {category}, Deadline: {deadline}, Priority: {priority}")
+        all_tasks.append(f"Task: {task}, Category: {category}, Deadline: {deadline}, Priority: {priority}, Complete: False")
         messagebox.showinfo("Task Added", "Your task has been added successfully!")
 
         # Clear the entries
@@ -76,12 +76,25 @@ def display_all_tasks():
     for task in all_tasks:
         task_listbox.insert(tk.END, task)
 
+
+# Mark complete function
+def mark_complete():
+    # Get the selected task from the listbox
+    try:
+        selected_task_index = task_listbox.curselection()[0]
+        task_listbox.itemconfig(selected_task_index, {'bg':'lightgreen'})
+        task = task_listbox.get(selected_task_index)
+        all_tasks[selected_task_index] = task.replace("Complete: False", "Complete: True")
+        messagebox.showinfo("Task Complete", "Your task has been completed successfully!")
+    except IndexError:
+        messagebox.showerror("No Selection", "Please select a task to mark as complete.")
+
 # Initialize the main window
 window = tk.Tk()
 
 window.title('To-Do App')
 
-window.geometry('600x400')
+window.geometry('600x500')
 
 # Create a frame to hold the widget
 frame = tk.Frame(window)
@@ -113,19 +126,24 @@ category_menu = tk.OptionMenu(frame, category_filter, *category_list)
 category_menu.pack(pady=5)
 
 # Button to add task
-add_task_button = tk.Button(frame, text="Add Task", width="15", command=add_task)
-add_task_button.pack(pady=10)
+add_task_button = tk.Button(frame, text="Add Task", width=15, command=add_task)
+add_task_button.pack(pady=5)
 
 # Button to edit task
-edit_task_button = tk.Button(frame, text="Edit Task", width="15", command=edit_task)
-edit_task_button.pack(pady=10)
+edit_task_button = tk.Button(frame, text="Edit Task", width=15, command=edit_task)
+edit_task_button.pack(pady=5)
 
 # Button to apply the filter
-filter_button = tk.Button(frame, text="Filter Task", width="15", command=filter_task)
+filter_button = tk.Button(frame, text="Filter Task", width=15, command=filter_task)
+filter_button.pack(pady=5)
+
+# Button to mark complete
+mark_complete_button = tk.Button(frame, text="Mark Complete", width=15, command=mark_complete)
+mark_complete_button.pack(pady=5)
 
 # Button to remove task
-remove_task_button = tk.Button(frame, text="Remove Task", width="15", command=remove_task)
-remove_task_button.pack(pady=10)
+remove_task_button = tk.Button(frame, text="Remove Task", width=15, command=remove_task)
+remove_task_button.pack(pady=5)
 
 # List box to display tasks
 task_listbox = tk.Listbox(frame, width=80, height=10)
