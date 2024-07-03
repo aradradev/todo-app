@@ -1,3 +1,4 @@
+import json
 import tkinter as tk
 from tkinter import messagebox
 
@@ -94,6 +95,20 @@ def mark_complete():
     except IndexError:
         messagebox.showerror("No Selection", "Please select a task to mark as complete.")
 
+# View Completed tasks function
+def view_completed_tasks():
+    task_listbox.delete(0, tk.END)
+    for task in all_tasks:
+        if task['complete'] == True:
+            task_str = f"Task: {task['task']}, Category: {task['category']}, Deadline: {task['deadline']}, Priority: {task['priority']}, Complete: True"
+            task_listbox.insert(tk.END, task_str)
+
+# Save tasks function
+def save_tasks():
+    with open('tasks.json', 'w') as file:
+        json.dump(all_tasks, file)
+    messagebox.showinfo("Save Tasks", "Tasks saved successfully!")
+
 # Initialize the main window
 window = tk.Tk()
 
@@ -145,6 +160,13 @@ filter_button.pack(pady=5)
 # Button to mark complete
 mark_complete_button = tk.Button(frame, text="Mark Complete", width=15, command=mark_complete)
 mark_complete_button.pack(pady=5)
+
+# Button to view completed task
+view_complete_button = tk.Button(frame, text="View Complete", width=15, command=view_completed_tasks)
+view_completed_button.pack(pady=5)
+
+# Button to save tasks
+save_task_button = tk.Button(frame, text="Save Task", width=15, command=save_tasks)
 
 # Button to remove task
 remove_task_button = tk.Button(frame, text="Remove Task", width=15, command=remove_task)
