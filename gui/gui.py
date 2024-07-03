@@ -11,8 +11,8 @@ def add_task():
 
     if task and category and deadline and priority:
         # Add the task to the list
-        task_listbox.insert(tk.END, f"Task: {task}, Category: {category}, Deadline: {deadline}, Priority: {priority}")
-        all_tasks.append(f"Task: {task}, Category: {category}, Deadline: {deadline}, Priority: {priority}, Complete: False")
+        task_listbox.insert(tk.END, f"Task: {task}, Category: {category}, Deadline: {deadline}, Priority: {priority}, Complete: False")
+        all_tasks.append({"task": task, "category": category, "deadline": deadline, 'priority': priority, "complete": False})
         messagebox.showinfo("Task Added", "Your task has been added successfully!")
 
         # Clear the entries
@@ -67,14 +67,16 @@ def filter_task():
             task_listbox.delete(0, tk.END)
             for task in all_tasks:
                 if f"Category: {select_category}" in task:
-                    task_listbox.insert(tk.END, task)
+                    task_str = f"Task: {task['task']}, Category: {task['category']}, Deadline: {task['deadline']}, Priority: {task['priority']}, Complete: True"
+                    task_listbox.insert(tk.END, task_str)
     except IndexError:
         messagebox.showerror("No Selection", "Please select a category.")
 
 def display_all_tasks():
     task_listbox.delete(0, tk.END)
     for task in all_tasks:
-        task_listbox.insert(tk.END, task)
+        task_str = f"Task: {task['task']}, Category: {task['category']}, Deadline: {task['deadline']}, Priority: {task['priority']}, Complete: True"
+        task_listbox.insert(tk.END, task_str)
 
 
 # Mark complete function
@@ -83,8 +85,11 @@ def mark_complete():
     try:
         selected_task_index = task_listbox.curselection()[0]
         task_listbox.itemconfig(selected_task_index, {'bg':'lightgreen'})
-        task = task_listbox.get(selected_task_index)
-        all_tasks[selected_task_index] = task.replace("Complete: False", "Complete: True")
+        task = all_tasks[selected_task_index]
+        task['complete'] = True
+        updated_tasks = f"Task: {task['task']}, Category: {task['category']}, Deadline: {task['deadline']}, Priority: {task['priority']}, Complete: True"
+        task_listbox.delete(selected_task_index)
+        task_listbox.insert(selected_task_index, updated_tasks)
         messagebox.showinfo("Task Complete", "Your task has been completed successfully!")
     except IndexError:
         messagebox.showerror("No Selection", "Please select a task to mark as complete.")
